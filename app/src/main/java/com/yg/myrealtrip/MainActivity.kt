@@ -11,7 +11,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //TODO
+        val readNews : ReadNews = ReadNews()
+        readNews.readNews()
 
         val newsList: ArrayList<NewsListItem> = ArrayList()
         newsList.add(NewsListItem("사진0", "제목0", "일부0", "KEY0_0", "KEY0_1", "KEY0_2"))

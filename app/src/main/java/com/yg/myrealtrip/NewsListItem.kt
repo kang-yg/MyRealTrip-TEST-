@@ -23,4 +23,10 @@ class NewsListItem {
         this.newsKey1 = newsKey1
         this.newsKey2 = newsKey2
     }
+
+    constructor(newsThumbnail: String, newsTitle: String, newsPart: String) {
+        this.newsThumbnail = newsThumbnail
+        this.newsTitle = newsTitle
+        this.newsPart = newsPart
+    }
 }

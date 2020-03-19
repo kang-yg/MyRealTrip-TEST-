@@ -1,2 +1,3 @@
-* Read RSS
-https://github.com/prof18/RSS-Parser
+* Read RSS<br>
+https://medium.com/@limgyumin
+https://developer.android.com/training/basics/network-ops/xml#choose
