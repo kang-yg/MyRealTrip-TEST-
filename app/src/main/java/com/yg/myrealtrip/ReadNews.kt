@@ -1,18 +1,20 @@
 package com.yg.myrealtrip
 
 import android.util.Log
-import android.util.Xml
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
 import java.io.IOException
-import java.io.InputStream
 import java.net.URL
 
-class ReadNews{
+val STEP_NON: Int = 0
+val STEP_TITLE: Int = 1
+val STEP_LINK: Int = 2
+
+class ReadNews {
     val job: Job = Job()
     val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)
 
@@ -20,50 +22,53 @@ class ReadNews{
         Log.d("readNews()", "call")
         scope.launch {
             Log.d("readNews()", "launch")
-            var title : String
-            var link : String
-            var description : String
 
+            var title: String
+            var link: String
+
+            val url: URL = URL("https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko")
+            val parserFactory: XmlPullParserFactory = XmlPullParserFactory.newInstance()
+            val parser: XmlPullParser = parserFactory.newPullParser()
+
+            var insideItem: Boolean = false
+            var step: Int = 0
             try {
-                val url: URL = URL("https://news.google.com/rss")
-                val inputStream: InputStream = url.openConnection().getInputStream()
+                parser.setInput(url.openConnection().getInputStream(), "UTF-8")
 
-                var myParser: XmlPullParser = Xml.newPullParser()
-                myParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-                myParser.setInput(inputStream, null)
+                var eventType: Int = parser.eventType
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    if (eventType == XmlPullParser.START_DOCUMENT) {
 
-                myParser.nextTag()
-                while (myParser.next() != XmlPullParser.END_DOCUMENT) {
-                    val name : String = myParser.name
-                    var result : String = ""
-                    if (myParser.next() == XmlPullParser.TEXT){
-                        result = myParser.text
-                        myParser.nextTag()
+                    } else if (eventType == XmlPullParser.START_TAG) {
+                        var startTag: String = parser.name
+                        if (startTag.equals("item")) {
+                            insideItem = true
+                        } else if (startTag.equals("title")) {
+                            step = STEP_TITLE
+                        } else if (startTag.equals("link")) {
+                            step = STEP_LINK
+                        } else {
+                            insideItem = false
+                            step = STEP_NON
+                        }
+                    } else if (eventType == XmlPullParser.TEXT) {
+                        var text: String = parser.text
+                        if (insideItem) {
+                            if (step == STEP_TITLE) {
+                                title = text
+                                Log.d("readNews()", "TITLE: ${text}")
+                            } else if (step == STEP_LINK) {
+                                link = text
+                                Log.d("readNews()", "LINK: ${text}")
+                            }
+                        }
                     }
 
-                    if (name.equals("title")){
-                        title = result
-                        Log.d("readNews()", "title : ${title}")
-
-                    }
-                    if (name.equals("link")){
-                        link = result
-                        Log.d("readNews()", "link : ${link}")
-
-                    }
-                    if (name.equals("description")){
-                        description = result
-                        Log.d("readNews()", "description : ${description}")
-
-                    }
-
-                    Log.d("readNews()", "CheckPoint")
+                    eventType = parser.next()
                 }
-
             } catch (e: IOException) {
                 Log.e("readNews()", e.toString())
             }
         }
     }
-
 }
