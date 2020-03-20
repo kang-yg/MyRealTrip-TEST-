@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val readNews : ReadNews = ReadNews()
-        readNews.readNews()
 
         val newsList: ArrayList<NewsListItem> = ArrayList()
         newsList.add(NewsListItem("사진0", "제목0", "일부0", "KEY0_0", "KEY0_1", "KEY0_2"))

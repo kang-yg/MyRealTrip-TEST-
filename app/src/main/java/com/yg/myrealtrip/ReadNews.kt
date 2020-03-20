@@ -5,6 +5,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.IOException
@@ -15,13 +18,19 @@ val STEP_TITLE: Int = 1
 val STEP_LINK: Int = 2
 
 class ReadNews {
-    val job: Job = Job()
-    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)
+
 
     fun readNews() {
-        Log.d("readNews()", "call")
+        Log.d("readNews()", "start")
+
+    }
+
+    fun readXML() {
+        val job: Job = Job()
+        val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)
+
         scope.launch {
-            Log.d("readNews()", "launch")
+            Log.d("readXML()", "launch")
 
             var title: String
             var link: String
@@ -56,10 +65,10 @@ class ReadNews {
                         if (insideItem) {
                             if (step == STEP_TITLE) {
                                 title = text
-                                Log.d("readNews()", "TITLE: ${text}")
+                                Log.d("readXML()", "TITLE: ${text}")
                             } else if (step == STEP_LINK) {
                                 link = text
-                                Log.d("readNews()", "LINK: ${text}")
+                                Log.d("readXML()", "LINK: ${text}")
                             }
                         }
                     }
@@ -67,7 +76,42 @@ class ReadNews {
                     eventType = parser.next()
                 }
             } catch (e: IOException) {
-                Log.e("readNews()", e.toString())
+                Log.e("readXML()", e.printStackTrace().toString())
+            }
+        }
+    }
+
+    //TODO Use Glide → get Image
+    fun getThumbnail(_link: String) {
+        val job: Job = Job()
+        val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)
+
+        scope.launch {
+            try {
+                val doc: Document = Jsoup.connect(_link).get()
+                val element: Elements = doc.select("meta[property=og:image]")
+                val imageLink: String = element.first().attr("content")
+                Log.d("getThumbnail()", "${imageLink}")
+
+            } catch (e: IOException) {
+                Log.e("getThumbnail()", e.printStackTrace().toString())
+            }
+        }
+    }
+
+    fun getDescription(_link: String) {
+        val job: Job = Job()
+        val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)
+
+        scope.launch {
+            try {
+                val doc: Document = Jsoup.connect(_link).get()
+                val element: Elements = doc.select("meta[property=og:description]")
+                val description: String = element.first().attr("content")
+                Log.d("getThumbnail()", "${description}")
+
+            } catch (e: IOException) {
+                Log.e("getThumbnail()", e.printStackTrace().toString())
             }
         }
     }
