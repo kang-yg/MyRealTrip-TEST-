@@ -22,18 +22,17 @@ class ReadNews {
 
     fun readNews() {
         Log.d("readNews()", "start")
-
     }
 
     fun readXML() {
         val job: Job = Job()
         val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)
 
+        var title: String = ""
+        var link: String = ""
+
         scope.launch {
             Log.d("readXML()", "launch")
-
-            var title: String
-            var link: String
 
             val url: URL = URL("https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko")
             val parserFactory: XmlPullParserFactory = XmlPullParserFactory.newInstance()
@@ -81,7 +80,6 @@ class ReadNews {
         }
     }
 
-    //TODO Use Glide → get Image
     fun getThumbnail(_link: String) {
         val job: Job = Job()
         val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)

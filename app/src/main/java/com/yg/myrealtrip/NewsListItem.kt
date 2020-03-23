@@ -1,32 +1,32 @@
 package com.yg.myrealtrip
 
 class NewsListItem {
-    lateinit var newsThumbnail: String
+    lateinit var newsThumbnailLink: String
     lateinit var newsTitle: String
-    lateinit var newsPart: String
+    lateinit var newsDescription: String
     lateinit var newsKey0: String
     lateinit var newsKey1: String
     lateinit var newsKey2: String
 
     constructor(
-        newsThumbnail: String,
+        newsThumbnailLink: String,
         newsTitle: String,
-        newsPart: String,
+        newsDescription: String,
         newsKey0: String,
         newsKey1: String,
         newsKey2: String
     ) {
-        this.newsThumbnail = newsThumbnail
+        this.newsThumbnailLink = newsThumbnailLink
         this.newsTitle = newsTitle
-        this.newsPart = newsPart
+        this.newsDescription = newsDescription
         this.newsKey0 = newsKey0
         this.newsKey1 = newsKey1
         this.newsKey2 = newsKey2
     }
 
-    constructor(newsThumbnail: String, newsTitle: String, newsPart: String) {
-        this.newsThumbnail = newsThumbnail
+    constructor(newsThumbnailLink: String, newsTitle: String, newsDescription: String) {
+        this.newsThumbnailLink = newsThumbnailLink
         this.newsTitle = newsTitle
-        this.newsPart = newsPart
+        this.newsDescription = newsDescription
     }
 }

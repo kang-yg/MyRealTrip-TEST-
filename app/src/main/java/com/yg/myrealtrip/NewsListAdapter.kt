@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.newslist_item.view.*
 
 class NewsListAdapter(val newsList: ArrayList<NewsListItem>) :
@@ -11,14 +12,14 @@ class NewsListAdapter(val newsList: ArrayList<NewsListItem>) :
     inner class NewsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //TODO thumbnail
         fun bind(_newsList: NewsListItem) {
+            Glide.with(itemView).load(_newsList.newsThumbnailLink)
+                .into(itemView.newsItem_thumbnail)
             itemView.newsItem_title.text = _newsList.newsTitle
-            itemView.newsItem_part.text = _newsList.newsPart
+            itemView.newsItem_description.text = _newsList.newsDescription
             itemView.key0.text = _newsList.newsKey0
             itemView.key1.text = _newsList.newsKey1
             itemView.key2.text = _newsList.newsKey2
         }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsListViewHolder {
