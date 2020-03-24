@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.newslist_item.view.*
 class NewsListAdapter(val newsList: ArrayList<NewsListItem>) :
     RecyclerView.Adapter<NewsListAdapter.NewsListViewHolder>() {
     inner class NewsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //TODO thumbnail
         fun bind(_newsList: NewsListItem) {
             Glide.with(itemView).load(_newsList.newsThumbnailLink)
                 .into(itemView.newsItem_thumbnail)
