@@ -25,6 +25,8 @@ class ReadMetaProperty {
             }
         } catch (e: IOException) {
             Log.e("getThumbnail()", e.printStackTrace().toString())
+        } finally {
+            Log.d("getThumbnail()", "finish")
         }
 
         return resulImageLink
@@ -48,6 +50,9 @@ class ReadMetaProperty {
             }
         } catch (e: IOException) {
             Log.e("getDescription()", e.printStackTrace().toString())
+        } finally {
+            Log.d("getDescription()", "finish")
+
         }
 
         return resultDescription

@@ -4,17 +4,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var myHandler: Handler
     val READXML: Int = 1
+    val READMETA: Int = 2
+    var metaFlag: BooleanArray = BooleanArray(2)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val newsList: ArrayList<NewsListItem> = ArrayList()
 
         myHandler = object : Handler() {
             override fun handleMessage(msg: Message?) {
@@ -23,31 +29,35 @@ class MainActivity : AppCompatActivity() {
                         CallReadMetaDes().start()
                         CallReadMetaImage().start()
                     }
+
+                    READMETA -> {
+                        if (metaFlag[0] && metaFlag[1]) {
+                            newsList_progress.visibility = View.GONE
+                            for (i in 0 until GlobalVariable.resultTitle.size) {
+                                newsList.add(
+                                    NewsListItem(
+                                        GlobalVariable.resulImageLink[i],
+                                        GlobalVariable.resultTitle[i],
+                                        GlobalVariable.resultDescription[i],
+                                        "KEY${i}_0",
+                                        "KEY${i}_1",
+                                        "KEY${i}_2"
+                                    )
+                                )
+                            }
+
+                            val viewManager: RecyclerView.LayoutManager = LinearLayoutManager(applicationContext)
+                            val viewAdapter: RecyclerView.Adapter<*> = NewsListAdapter(newsList)
+                            findViewById<RecyclerView>(R.id.newsList).apply {
+                                layoutManager = viewManager
+                                adapter = viewAdapter
+                            }
+                        }
+                    }
                 }
             }
         }
         CallReadXML().start()
-
-        //TODO 쓰레드 작업 완료 후 newsList생성
-        val newsList: ArrayList<NewsListItem> = ArrayList()
-        newsList.add(
-            NewsListItem(
-                "http://flexible.img.hani.co.kr/flexible/normal/960/720/imgdb/original/2020/0323/20200323501445.jpg",
-                "제목0",
-                "일부0",
-                "KEY0_0",
-                "KEY0_1",
-                "KEY0_2"
-            )
-        )
-        newsList.add(NewsListItem("사진1", "제목1", "일부1", "KEY1_0", "KEY1_1", "KEY1_2"))
-
-        val viewManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-        val viewAdapter: RecyclerView.Adapter<*> = NewsListAdapter(newsList)
-        val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.newsList).apply {
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
     }
 
     inner class CallReadXML : Thread() {
@@ -55,23 +65,34 @@ class MainActivity : AppCompatActivity() {
         override fun run() {
             myMessage.what = READXML
             val readXML: ReadXML = ReadXML()
-            GlobalVariable.resultLink = readXML.readXML()
+            GlobalVariable.resultTitle = readXML.readXML().get("title")!!
+            GlobalVariable.resultLink = readXML.readXML().get("link")!!
 
             myHandler.sendMessage(myMessage)
         }
     }
 
     inner class CallReadMetaDes : Thread() {
+        val myMessage: Message = myHandler.obtainMessage()
         override fun run() {
+            myMessage.what = READMETA
             val readMetaProperty: ReadMetaProperty = ReadMetaProperty()
             GlobalVariable.resultDescription = readMetaProperty.getDescription(GlobalVariable.resultLink)
+
+            metaFlag[0] = true
+            myHandler.sendMessage(myMessage)
         }
     }
 
     inner class CallReadMetaImage : Thread() {
+        val myMessage: Message = myHandler.obtainMessage()
         override fun run() {
+            myMessage.what = READMETA
             val readMetaProperty: ReadMetaProperty = ReadMetaProperty()
             GlobalVariable.resulImageLink = readMetaProperty.getThumbnail(GlobalVariable.resultLink)
+
+            metaFlag[1] = true
+            myHandler.sendMessage(myMessage)
         }
     }
 }

@@ -11,10 +11,12 @@ val STEP_TITLE: Int = 1
 val STEP_LINK: Int = 2
 
 class ReadXML {
-    fun readXML(): ArrayList<String> {
+    fun readXML(): HashMap<String, ArrayList<String>> {
         Log.d("readXML()", "readXML()")
 
         var resultLink: ArrayList<String> = ArrayList()
+        var resultTitle: ArrayList<String> = ArrayList()
+        var finalResult: HashMap<String, ArrayList<String>> = hashMapOf()
 
         val url: URL = URL("https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko")
         val parserFactory: XmlPullParserFactory = XmlPullParserFactory.newInstance()
@@ -45,6 +47,7 @@ class ReadXML {
                     var text: String = parser.text
                     if (insideItem) {
                         if (step == STEP_TITLE) {
+                            resultTitle.add(text)
                             Log.d("readXML()", "TITLE: ${text}")
                         } else if (step == STEP_LINK) {
                             resultLink.add(text)
@@ -59,6 +62,9 @@ class ReadXML {
             Log.e("readXML()", e.printStackTrace().toString())
         }
 
-        return resultLink
+        finalResult.put("title", resultTitle)
+        finalResult.put("link", resultLink)
+
+        return finalResult
     }
 }
