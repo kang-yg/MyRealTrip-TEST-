@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.newslist_item.view.*
 
-class NewsListAdapter(val newsList: ArrayList<NewsListItem>) :
+class NewsListAdapter(val newsList: ArrayList<NewsListItem>, val itemClick: (NewsListItem) -> Unit) :
     RecyclerView.Adapter<NewsListAdapter.NewsListViewHolder>() {
-    inner class NewsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class NewsListViewHolder(itemView: View, itemClick: (NewsListItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
         fun bind(_newsList: NewsListItem) {
             Glide.with(itemView).load(_newsList.newsThumbnailLink)
                 .into(itemView.newsItem_thumbnail)
@@ -18,13 +18,15 @@ class NewsListAdapter(val newsList: ArrayList<NewsListItem>) :
             itemView.key0.text = _newsList.newsKey0
             itemView.key1.text = _newsList.newsKey1
             itemView.key2.text = _newsList.newsKey2
+
+            itemView.setOnClickListener { itemClick(_newsList) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsListViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.newslist_item, parent, false)
 
-        return NewsListViewHolder(v)
+        return NewsListViewHolder(v, itemClick)
     }
 
     override fun onBindViewHolder(holder: NewsListViewHolder, position: Int) {
@@ -34,5 +36,4 @@ class NewsListAdapter(val newsList: ArrayList<NewsListItem>) :
     override fun getItemCount(): Int {
         return newsList.size
     }
-
 }

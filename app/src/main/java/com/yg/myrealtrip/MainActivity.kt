@@ -1,10 +1,12 @@
 package com.yg.myrealtrip
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                             for (i in 0 until GlobalVariable.resultTitle.size) {
                                 newsList.add(
                                     NewsListItem(
+                                        GlobalVariable.resultLink[i],
                                         GlobalVariable.resulImageLink[i],
                                         GlobalVariable.resultTitle[i],
                                         GlobalVariable.resultDescription[i],
@@ -47,7 +50,13 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             val viewManager: RecyclerView.LayoutManager = LinearLayoutManager(applicationContext)
-                            val viewAdapter: RecyclerView.Adapter<*> = NewsListAdapter(newsList)
+                            val viewAdapter: RecyclerView.Adapter<*> = NewsListAdapter(newsList) { news ->
+                                Toast.makeText(applicationContext, "${news.newsTitle}", Toast.LENGTH_SHORT).show()
+                                val intent: Intent = Intent(applicationContext, NewsDetailAcivity::class.java)
+                                intent.putExtra("title", news.newsTitle)
+                                intent.putExtra("link", news.newsLink)
+                                startActivity(intent)
+                            }
                             findViewById<RecyclerView>(R.id.newsList).apply {
                                 layoutManager = viewManager
                                 adapter = viewAdapter
