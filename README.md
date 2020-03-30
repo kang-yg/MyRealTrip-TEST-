@@ -20,3 +20,16 @@ https://gun0912.tistory.com/17<br>
 https://developside.tistory.com/85<br>
 Android9(API 28) 부터 강화된 네트워크 보안정책으로 http프로토콜 접속을 제한한다.<br>
 → maifest에서 usesCleartextTraffic속성을 true로 수정한다. usesCleartextTraffic속성은 앱이 일반 텍스트 HTTP와 같은 일반 텍스트 네트워크 트래픽을 사용하는지 여부를 나타낸다. <br>
+
+* WebView<br>
+https://web-inf.tistory.com/34<br>
+https://jerryjerryjerry.tistory.com/72<br>
+
+* Glide CropCircleTransformation<br>
+https://github.com/wasabeef/glide-transformations#crop<br>
+https://gun0912.tistory.com/34<br>
+CropCircleTransformation is Deprecated<br>
+→ Glide.with(this).load(R.drawable.demo).apply(RequestOptions.bitmapTransform(multi)).into(imageView))<br>
+
+* ImageView masking<br>
+https://www.youtube.com/watch?v=46GX7wi9P-M<br>
