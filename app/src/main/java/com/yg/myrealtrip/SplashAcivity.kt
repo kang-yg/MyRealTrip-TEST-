@@ -5,8 +5,6 @@ import android.graphics.*
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.splash_activity.*
 
 class SplashAcivity : AppCompatActivity() {
@@ -20,13 +18,12 @@ class SplashAcivity : AppCompatActivity() {
 
         maskingProcess()
 
-/*
         Handler().postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
-        }, 1500)*/
+            finish()
+        }, 1500)
     }
 
-    //TODO Glide CropCircleTransformation와 차이?
     fun maskingProcess() {
         try {
             var original0: Bitmap

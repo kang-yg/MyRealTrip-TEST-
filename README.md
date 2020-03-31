@@ -33,3 +33,12 @@ CropCircleTransformation is Deprecated<br>
 
 * ImageView masking<br>
 https://www.youtube.com/watch?v=46GX7wi9P-M<br>
+
+* Pull to Refresh<br>
+https://guides.codepath.com/android/implementing-pull-to-refresh-guide<br>
+https://johncodeos.com/add-pull-to-refresh-to-your-android-app-using-kotlin/<br>
+
+* java.security.cert.CertPathValidatorException<br>
+https://twinw.tistory.com/46<br>
+https://puzzleleaf.tistory.com/5<br>
+서버측이 가지고 있는 인증서가 자체서명된 루트인증서이며, 타사에 의해 검증되지 않았기 때문에 보안인증서에 문제가 있다고 해서 뜨는것이다.<br>

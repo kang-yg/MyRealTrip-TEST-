@@ -10,26 +10,28 @@ class ReadMetaProperty {
     fun getThumbnail(_linkArray: ArrayList<String>): ArrayList<String> {
         Log.d("getThumbnail()", "getThumbnail()")
 
-        var resulImageLink: ArrayList<String> = ArrayList()
+        var resultImageLink: ArrayList<String> = ArrayList()
         try {
-            for (i in _linkArray) {
-                val doc: Document = Jsoup.connect(i).get()
+            for (i in 0 until _linkArray.size) {
+                val doc: Document = Jsoup.connect(_linkArray[i]).get()
                 val elements: Elements = doc.select("meta[property=og:image]")
                 if (!elements.isNullOrEmpty()) {
-                    val imageLink: String = elements.first().attr("content")
-                    resulImageLink.add(imageLink)
+                    val imageLink: String = elements[0].attr("content")
+                    resultImageLink.add(imageLink)
                     Log.d("getThumbnail()", "Image: ${imageLink}")
                 } else {
-                    resulImageLink.add("NO DATA")
+                    resultImageLink.add("NO DATA")
+                    Log.d("getThumbnail()", "NO DATA")
                 }
             }
         } catch (e: IOException) {
-            Log.e("getThumbnail()", e.printStackTrace().toString())
+            resultImageLink.add("NO DATA")
+//            Log.e("getThumbnail()", "error : ${e.message}")
         } finally {
             Log.d("getThumbnail()", "finish")
         }
 
-        return resulImageLink
+        return resultImageLink
     }
 
     fun getDescription(_linkArray: ArrayList<String>): ArrayList<String> {
@@ -37,22 +39,23 @@ class ReadMetaProperty {
 
         var resultDescription: ArrayList<String> = ArrayList()
         try {
-            for (i in _linkArray) {
-                val doc: Document = Jsoup.connect(i).get()
+            for (i in 0 until _linkArray.size) {
+                val doc: Document = Jsoup.connect(_linkArray[i]).get()
                 val elements: Elements = doc.select("meta[property=og:description]")
                 if (!elements.isNullOrEmpty()) {
-                    val description: String = elements.first().attr("content")
+                    val description: String = elements[0].attr("content")
                     resultDescription.add(description)
                     Log.d("getDescription()", "Descriotion: ${description}")
                 } else {
                     resultDescription.add("NO DATA")
+                    Log.d("getDescription()", "NO DATA")
                 }
             }
         } catch (e: IOException) {
-            Log.e("getDescription()", e.printStackTrace().toString())
+            resultDescription.add("NO DATA")
+//            Log.e("getDescription()", "error : ${e.message}")
         } finally {
             Log.d("getDescription()", "finish")
-
         }
 
         return resultDescription
